@@ -1,7 +1,6 @@
 langchain
 sentence-transformers
 langchain-community
-langchain-groq
 chromadb
 torch
 anvil-uplink

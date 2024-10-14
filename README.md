@@ -14,16 +14,6 @@ The pipeline works as follows:
 2. Summaries are generated and stored in `summarized.json`.
 3. `actualpls_rag.py` then operates on `summarized.json` to answer questions using a RAG approach.
 
-## Tech Stack
-
-- Python 3.x
-- PyTorch
-- Transformers (Hugging Face)
-- LangChain
-- Chroma (Vector Store)
-- Groq (LLM API)
-- Sentence Transformers
-- Anvil Uplink
 
 ## How to Run
 
@@ -38,24 +28,18 @@ The pipeline works as follows:
 
 ### 2. RAG Query Answering
 
-1. Set up your Groq API key:
-   ```
-   export GROQ_API_KEY="your_groq_api_key_here"
-   ```
-   Or add the key as a secret in google colab, then run:
-   ```
-   import os
-   from google.colab import userdata
-   os.environ["GROQ_API_KEY"] = userdata.get('secretName')
-   ```
-2. Run the RAG script:
+1. Run the RAG script:
    ```
    actualpls_RAG.ipynb
    ```
    **Note:** You need to restart session (in google colab) after installing `anvil-uplink`
-3. This will start an Anvil server that can receive queries.
+2. This will start an Anvil server that can receive queries.
 
 ## Tech Stack
+
+- LangChain
+- sentence transformer
+- pyTorch
 
 ### Summarization
 - BART-large-CNN
@@ -63,7 +47,7 @@ The pipeline works as follows:
 ### RAG Pipeline
 - all-MiniLM-L6-v2 (for generating vector embeddings)
 - Chroma (as a vectorstore)
-- Mixtral-8x7b (as LLM, using Groq's interface)
+- Flan T5 Large
 
 ### Deployment
 - Anvil app
@@ -82,7 +66,7 @@ This script:
 This script:
 1. Loads summarized documents from `summarized.json`.
 2. Splits documents and creates a Chroma vector store.
-3. Sets up a RAG pipeline using LangChain and Groq's LLM.
+3. Sets up a RAG pipeline using LangChain.
 4. Classifies incoming queries into three types: inference, comparison, or temporal.
 5. Uses appropriate prompts based on query type to generate answers.
 6. Runs an Anvil server to receive queries and return answers.
@@ -104,6 +88,4 @@ The project uses Anvil to create a server endpoint. To use this:
 ## Limitations and Future Improvements
 
 - The Anvil server setup might need to be replaced with a different web framework for production use.
-- The query classification system could be enhanced with zero-shot classification deep learning models like BART MNLI for better accuracy.
-- A confidence threshold can be set up to fetch only the relevant documents, instead of always fetching three.
-- If no relevant documents are found, the query could be classified into a "null_query" and "Not enough information" could be returned as answer, so as to prevent hallucination.
+- A hybrid query classification system could be implemented with zero-shot classification deep learning models like BART MNLI reinforcing the initial prediction for better accuracy.
